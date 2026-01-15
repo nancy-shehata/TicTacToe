@@ -12,7 +12,12 @@ const gameBoard = {
     },
 
     placeMarker(row,col,marker){
+        if(this.board[row][col] != null){
+            return false;       // failed to place marker
+        }else{
         this.board[row][col] = marker;
+        return true;        // successfully placed marker
+        }
     },
 
 
@@ -64,32 +69,50 @@ const gameFlow = {
 
 
     playRound(){
+    let validMove = false;
+    do {
         const row = Number(prompt('which row? 0,1,2'));
         const col = Number(prompt('which column? 0,1,2'));
         console.log(row,col);
 
-        gameBoard.placeMarker(row,col,this.currPlayer.marker);
+        validMove = gameBoard.placeMarker(row,col,this.currPlayer.marker);
+
+        if(!validMove){
+            console.log("Invalid move! Spot taken try again.")
+        }
+
+    }while (!validMove);
+    
         console.log(gameBoard.board);
 
+
+        const winner = gameBoard.checkWin();
+        if(winner){
+            console.log(`${winner} won`);
+            return true;
+        }
+        
+
+        // switch turns 
         if (this.currPlayer === player1){
             this.currPlayer = player2;
         }else{
             this.currPlayer = player1;
         }
-       
+        return false;
 
     },
 
 
     startGame(){
         for (let i=0;i<9; i++){
-            this.playRound();
+            const gameOver = this.playRound();
+            if (gameOver){
+                break;      // stop loop if someone won
+            }
         }
     }
-
-
 };
-gameBoard.checkWin();
 gameFlow.startGame();
 
 
