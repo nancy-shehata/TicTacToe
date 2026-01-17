@@ -1,0 +1,24 @@
+.board-container{
+    display:flex;
+    justify-content:center;
+    align-content:center;
+    height:100vh;
+    background-color: #FDB06D;
+    display:grid;
+    grid-template-columns: repeat(3,100px);
+    grid-template-rows: repeat(3,100px);
+    gap: 8px;
+    
+}
+
+.boardCell{
+    background-color: #FFE0AB;
+    border:2px solid #E66D55;
+    border-radius:8px;
+    gap:8px;
+}
+
+.boardCell:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}

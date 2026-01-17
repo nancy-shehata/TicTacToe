@@ -1,6 +1,6 @@
 const gameBoard = {
     board: [],
-    
+
     initialize(){              // create board 
         for (let row=0; row<3;row++){
             this.board[row]=[];
@@ -8,7 +8,51 @@ const gameBoard = {
                     this.board[row][col]=null;
             }
         }
-        
+    },
+
+    createUI(){
+        const boardContainer = document.querySelector(".board-container");
+
+        for (let row=0;row<3;row++){
+            for (let col=0; col<3;col++){
+                const boardCell = document.createElement('div');
+                boardCell.classList.add("boardCell");
+
+                boardCell.dataset.row = row;
+                boardCell.dataset.col = col;
+
+                boardCell.addEventListener("click",()=>{
+                    const row = Number(boardCell.dataset.row);
+                    const col = Number(boardCell.dataset.col);
+                    console.log({row},{col})
+                    
+                    const marker = gameFlow.currPlayer.marker;
+                    console.log({marker})
+
+                    const success = gameBoard.placeMarker(row,col,marker);
+
+                    
+
+                    if(success){
+                        boardCell.textContent = marker;
+                        
+                        const winner = gameBoard.checkWin();
+                        if(winner){
+                            alert(`${winner} wins!`);
+                            return;     // dont switch if game is over
+                        }
+                        gameFlow.switchPlayer();
+                    }
+                });
+
+                boardContainer.appendChild(boardCell);
+            }
+        } 
+            //restart button
+            const restartButton = document.querySelector(".restart-btn");
+            restartButton.addEventListener("click",() =>{
+                gameFlow.restartGame();
+            });
     },
 
     placeMarker(row,col,marker){
@@ -16,8 +60,8 @@ const gameBoard = {
             return false;       // failed to place marker
         }else{
         this.board[row][col] = marker;
-        return true;        // successfully placed marker
-        }
+       return true;        // successfully placed marker
+       }
     },
 
 
@@ -40,16 +84,16 @@ const gameBoard = {
             const [a,b,c] = combo;      // split combo into 3 variables 
 
             if (this.board[a[0]][a[1]] !== null &&      // each variable has a coordinate e.g. (x,y) but here its (0,1)
-            this.board [a[0]][a[1]] === this.board[b[0]][b[1]] &&
-            this.board [a[0]][a[1]] === this.board[c[0]][c[1]] ){
-                return this.board[a[0]][a[1]];
+                this.board [a[0]][a[1]] === this.board[b[0]][b[1]] &&
+                this.board [a[0]][a[1]] === this.board[c[0]][c[1]] ){
+                    return this.board[a[0]][a[1]];
             }
         }
         return null; // if no winner 
     }
 }
 gameBoard.initialize();
-gameBoard.placeMarker
+gameBoard.createUI();
 
 
 function Player(marker){
@@ -68,31 +112,25 @@ const gameFlow = {
     currPlayer: player1,
 
 
-    playRound(){
-    let validMove = false;
-    do {
-        const row = Number(prompt('which row? 0,1,2'));
-        const col = Number(prompt('which column? 0,1,2'));
-        console.log(row,col);
+    playRound(row,col){
 
-        validMove = gameBoard.placeMarker(row,col,this.currPlayer.marker);
+        let validMove = false;
+        validMove = gameBoard.placeMarker(row,col,marker);
 
         if(!validMove){
-            console.log("Invalid move! Spot taken try again.")
+            return;     // do nothing
         }
-
-    }while (!validMove);
-    
-        console.log(gameBoard.board);
-
 
         const winner = gameBoard.checkWin();
         if(winner){
-            console.log(`${winner} won`);
+            alert (`${winner} won!`);
             return true;
         }
+        this.switchPlayer();
+    },
         
 
+    switchPlayer(){ 
         // switch turns 
         if (this.currPlayer === player1){
             this.currPlayer = player2;
@@ -104,15 +142,22 @@ const gameFlow = {
     },
 
 
-    startGame(){
-        for (let i=0;i<9; i++){
-            const gameOver = this.playRound();
-            if (gameOver){
-                break;      // stop loop if someone won
+    restartGame(){
+        for (let row=0; row<3; row++){
+            for (let col=0;col<3;col++){
+                gameBoard.board[row][col]= null;
             }
         }
+
+        const boardCells = document.querySelectorAll(".boardCell")
+        boardCells.forEach(boardcell =>{
+            boardcell.textContent = "";
+        });
+
+        this.currPlayer = player1;
     }
 };
-gameFlow.startGame();
+gameFlow.restartGame();
+
 
 
