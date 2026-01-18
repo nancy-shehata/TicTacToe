@@ -1,8 +1,11 @@
 .board-container{
+    margin:0 auto;
     display:flex;
     justify-content:center;
     align-content:center;
-    height:100vh;
+    height:400px;
+    width:400px;
+    border-radius: 8px;
     background-color: #FDB06D;
     display:grid;
     grid-template-columns: repeat(3,100px);
@@ -12,6 +15,11 @@
 }
 
 .boardCell{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size: 48px;
+    font-family:'Courier New', monospace;
     background-color: #FFE0AB;
     border:2px solid #E66D55;
     border-radius:8px;
@@ -21,4 +29,23 @@
 .boardCell:hover {
     transform: scale(1.1);
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+
+.title{
+    display:flex;
+    justify-content:center;
+    color:#E66D55;
+}
+
+
+.restart-btn{
+    border-radius: 8px;
+    border:none;
+    background-color:#E66D55;
+    color:white;
+    font-size: 18px;
+    padding: 10px 40px;
+    margin-top:30px;
+    margin-left:530px;
 }

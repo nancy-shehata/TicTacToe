@@ -22,6 +22,9 @@ const gameBoard = {
                 boardCell.dataset.col = col;
 
                 boardCell.addEventListener("click",()=>{
+                    if (gameFlow.gameOver) return;
+
+
                     const row = Number(boardCell.dataset.row);
                     const col = Number(boardCell.dataset.col);
                     console.log({row},{col})
@@ -39,20 +42,23 @@ const gameBoard = {
                         const winner = gameBoard.checkWin();
                         if(winner){
                             alert(`${winner} wins!`);
+                            gameFlow.gameOver = true;
                             return;     // dont switch if game is over
                         }
                         gameFlow.switchPlayer();
                     }
                 });
-
                 boardContainer.appendChild(boardCell);
             }
-        } 
+        }
+ 
             //restart button
             const restartButton = document.querySelector(".restart-btn");
             restartButton.addEventListener("click",() =>{
                 gameFlow.restartGame();
             });
+
+
     },
 
     placeMarker(row,col,marker){
@@ -110,6 +116,7 @@ player2.listMarker();
 
 const gameFlow = {
     currPlayer: player1,
+    gameOver: false ,
 
 
     playRound(row,col){
@@ -154,7 +161,9 @@ const gameFlow = {
             boardcell.textContent = "";
         });
 
-        this.currPlayer = player1;
+
+        this.gameOver = false;
+        this.currPlayer = player1
     }
 };
 gameFlow.restartGame();
