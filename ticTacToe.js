@@ -8,6 +8,7 @@ const gameBoard = {
                     this.board[row][col]=null;
             }
         }
+        
     },
 
     createUI(){
@@ -18,8 +19,8 @@ const gameBoard = {
                 const boardCell = document.createElement('div');
                 boardCell.classList.add("boardCell");
 
-                boardCell.dataset.row = row;
-                boardCell.dataset.col = col;
+                boardCell.dataset.row = row;        // stores number onto cell 
+                boardCell.dataset.col = col;     
 
                 boardCell.addEventListener("click",()=>{
                     if (gameFlow.gameOver) return;
